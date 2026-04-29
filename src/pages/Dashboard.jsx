@@ -1,123 +1,58 @@
-import TaskCard from "../components/TaskCard"
-import { tasks, progress, coach, learner } from "../data/mock"
+import { useState } from "react"
+import Layout from "../components/Layout"
+import ChatArea from "../components/ChatArea"
+import RightPanel from "../components/RightPanel"
 
-function ProgressRing({ value, size = 56, stroke = 5 }) {
-  const r = (size - stroke) / 2
-  const circ = 2 * Math.PI * r
-  const offset = circ - (value / 100) * circ
+const STATE_LABELS = [
+  "First task",
+  "Coach response",
+  "Last task",
+]
+
+// Alert banner mimicking the Figma notification at the top
+function AlertBanner({ text }) {
   return (
-    <svg width={size} height={size} className="-rotate-90">
-      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#e5e7eb" strokeWidth={stroke} />
-      <circle
-        cx={size / 2} cy={size / 2} r={r} fill="none"
-        stroke="#6366f1" strokeWidth={stroke}
-        strokeDasharray={circ} strokeDashoffset={offset}
-        strokeLinecap="round"
-      />
-    </svg>
+    <div className="flex items-center gap-2 px-5 py-2 text-xs" style={{ background: "#d8f5ea", color: "#171717" }}>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#337b64" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>
+      <span>{text}</span>
+    </div>
   )
 }
 
 export default function Dashboard() {
-  const firstTask = tasks.find((t) => t.status === "in_progress" || t.status === "not_started")
-  const submittedWithResponse = tasks.find((t) => t.coachResponse)
-  const lastTask = tasks[tasks.length - 1]
+  const [stateIndex, setStateIndex] = useState(0)
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-8">
-      {/* Header */}
-      <div className="mb-8">
-        <p className="text-sm text-gray-400 mb-1">Welcome back,</p>
-        <h1 className="text-2xl font-bold text-gray-900">{learner.name} 👋</h1>
-      </div>
+    <Layout>
+      <div className="flex flex-col flex-1 overflow-hidden">
+        <AlertBanner text="Nova L completed her assignment while you were away! Great job helping her get one step closer to graduating!" />
 
-      {/* Progress summary */}
-      <div className="grid grid-cols-3 gap-4 mb-8">
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4">
-          <div className="relative">
-            <ProgressRing value={progress.completionRate} />
-            <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-indigo-600">
-              {progress.completionRate}%
-            </span>
-          </div>
-          <div>
-            <p className="text-xs text-gray-400">Completion</p>
-            <p className="text-lg font-bold text-gray-900">
-              {progress.completedTasks}/{progress.totalTasks}
-            </p>
-            <p className="text-xs text-gray-400">tasks done</p>
-          </div>
+        {/* State switcher for prototype navigation */}
+        <div className="flex items-center gap-1 px-5 py-2 border-b border-gray-100 bg-white">
+          <span className="text-xs text-gray-400 mr-2">Screen:</span>
+          {STATE_LABELS.map((label, i) => (
+            <button
+              key={i}
+              onClick={() => setStateIndex(i)}
+              className="px-3 py-1 rounded-full text-xs font-medium transition-colors"
+              style={
+                stateIndex === i
+                  ? { background: "#1c3954", color: "#fff" }
+                  : { background: "#f3f4f6", color: "#6b7280" }
+              }
+            >
+              {label}
+            </button>
+          ))}
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-          <p className="text-xs text-gray-400 mb-1">Current week</p>
-          <p className="text-2xl font-bold text-gray-900">{progress.currentWeek}</p>
-          <p className="text-xs text-gray-400">of {progress.totalWeeks} weeks</p>
-          <div className="mt-2 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-indigo-500 rounded-full"
-              style={{ width: `${(progress.currentWeek / progress.totalWeeks) * 100}%` }}
-            />
-          </div>
-        </div>
-
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-          <p className="text-xs text-gray-400 mb-1">Your coach</p>
-          <div className="flex items-center gap-2 mt-1">
-            <div className="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white text-xs font-semibold shrink-0">
-              {coach.avatar}
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-gray-900">{coach.name}</p>
-              <p className="text-xs text-gray-400">{coach.role}</p>
-            </div>
-          </div>
-          <button className="mt-3 w-full text-xs text-indigo-600 font-medium hover:underline text-left">
-            Send a message →
-          </button>
+        <div className="flex flex-1 overflow-hidden">
+          <ChatArea stateIndex={stateIndex} />
+          <RightPanel />
         </div>
       </div>
-
-      {/* Task list sections */}
-      <div className="space-y-8">
-        {/* Section: First task (in progress / up next) */}
-        <section>
-          <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">
-            Up Next
-          </h2>
-          {firstTask && (
-            <TaskCard task={firstTask} isFirst defaultOpen />
-          )}
-        </section>
-
-        {/* Section: Submitted with coach response */}
-        {submittedWithResponse && (
-          <section>
-            <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">
-              Coach Feedback
-            </h2>
-            <TaskCard task={submittedWithResponse} defaultOpen />
-          </section>
-        )}
-
-        {/* Section: All tasks */}
-        <section>
-          <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">
-            All Tasks
-          </h2>
-          <div className="space-y-3">
-            {tasks.map((task, i) => (
-              <TaskCard
-                key={task.id}
-                task={task}
-                isFirst={i === 0}
-                isLast={i === tasks.length - 1}
-                defaultOpen={false}
-              />
-            ))}
-          </div>
-        </section>
-      </div>
-    </div>
+    </Layout>
   )
 }

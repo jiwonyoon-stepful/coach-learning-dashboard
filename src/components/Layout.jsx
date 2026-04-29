@@ -1,13 +1,16 @@
-import { Outlet } from "react-router-dom"
 import Sidebar from "./Sidebar"
+import TopBar from "./TopBar"
 
-export default function Layout() {
+export default function Layout({ children }) {
   return (
-    <div className="flex min-h-screen bg-[#f5f6fa]">
+    <div className="flex h-screen overflow-hidden bg-white">
       <Sidebar />
-      <main className="flex-1 overflow-auto">
-        <Outlet />
-      </main>
+      <div className="flex flex-col flex-1 overflow-hidden">
+        <TopBar />
+        <div className="flex flex-1 overflow-hidden">
+          {children}
+        </div>
+      </div>
     </div>
   )
 }

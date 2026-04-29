@@ -1,94 +1,141 @@
 export const coach = {
-  name: "Sarah Chen",
-  avatar: "SC",
-  role: "Learning Coach",
+  name: "Maria",
+  initials: "M",
+  avatar: "/avatar.png",
 }
 
-export const learner = {
-  name: "Alex Johnson",
-  avatar: "AJ",
-  role: "Medical Scribe Trainee",
+export const todaysTasks = [
+  { id: 1, name: "Deven Rose", cohort: "M54 Morning 3", type: "Outreach", reason: "Suspension", done: true },
+  { id: 2, name: "Sofia Mario", cohort: "M54 Morning 3", type: "Outreach", reason: "Suspension", done: true },
+  { id: 3, name: "Jamie Lee", cohort: "M56 Evening 11", type: "Outreach", reason: "Low grade", done: true },
+  { id: 4, name: "Keyon Moore", cohort: "M54 Morning 3", type: "Respond", reason: "AI coach escalation", done: false },
+]
+
+export const escalatedTasks = [
+  { id: 5, name: "Jasmine Ford", cohort: "M56 Evening 11", type: "Outreach", reason: "Suspension", escalated: true },
+]
+
+export const performance = {
+  week: "May 8-14, 2026",
+  teamRank: "#3 of 8",
+  outreach: "10 students",
+  sentiment: "4/5",
+  gradePts: "+47 pts",
+  payment: "$1240",
 }
 
-export const tasks = [
+export const cohortTargets = {
+  week: "May 8-14, 2026",
+  cohort: "M54",
+  metrics: [
+    { label: "Retention", value: "85%", goal: "90%", progress: 85 / 90 },
+    { label: "Pass rate", value: "66%", goal: "70%", progress: 66 / 70 },
+    { label: "Enrollment", value: "58%", goal: "65%", progress: 58 / 65 },
+    { label: "Suspensions", value: "8", goal: "5 or less", progress: 0.4, negative: true },
+    { label: "Low-grade outreach", value: "1/2", goal: "", progress: 0.5 },
+  ],
+}
+
+// Chat states: 0 = first task, 1 = coach responded, 2 = last task
+export const chatStates = [
+  {
+    id: 0,
+    messages: [
+      {
+        role: "ai",
+        avatar: "S",
+        name: "Steppy AI",
+        content: "Good morning, Maria! Here's what you need to do by Friday to be on track this week:",
+        type: "checklist",
+        items: [
+          "Resolve 3 suspensions (Retention 65% → 90%)",
+          "Grade outreach (Pass rate 66% → Mild 56% → 80%)",
+          "15 connections by Friday (Enrollment Mild 52% → 85%)",
+          "View grade outreach (1/2 outreach done)",
+        ],
+        footer: "You have 5 tasks for today in the weekly urgent reports.",
+      },
+    ],
+  },
   {
     id: 1,
-    week: 1,
-    title: "Introduction to Medical Terminology",
-    description:
-      "Complete the foundational module on medical terminology. Focus on prefixes, suffixes, and root words commonly used in clinical documentation.",
-    dueDate: "2026-05-02",
-    status: "in_progress",
-    type: "reading",
-    estimatedTime: "45 min",
-    submission: null,
-    coachResponse: null,
+    messages: [
+      {
+        role: "ai",
+        avatar: "S",
+        name: "Steppy AI",
+        content: "Help Jasmine pay $150 of her $300 outstanding balance before 5 pm.",
+        type: "task",
+        subtext: "Jasmine Ford's suspension soon expires at 5 pm today. She was unsuspended after a partial payment on Apr 21.",
+        studentCard: {
+          name: "Jasmine Ford",
+          cohort: "M56 Evening 11 · Outstanding balance",
+          avatar: "JF",
+        },
+        steps: [
+          {
+            id: "call",
+            label: "Call",
+            active: true,
+          },
+          {
+            id: "email",
+            label: "Email",
+          },
+          {
+            id: "sms",
+            label: "SMS",
+          },
+        ],
+        aiDraft: {
+          subject: "Al draft",
+          body: "Hi Jasmine, your suspension expires at 5 pm today. Please pay $150 of your $300 outstanding balance to keep your access to the classroom. Would you like to discuss a forgiveness option? I'm here to support you!",
+          actions: ["Skip for now", "Reply in Community"],
+        },
+      },
+      {
+        role: "user",
+        content: "I suggested her before she said no. I would like to talk to my manager.",
+      },
+    ],
   },
   {
     id: 2,
-    week: 1,
-    title: "Shadow a Live Patient Encounter",
-    description:
-      "Observe and document a real patient encounter. Pay attention to how the provider communicates with the patient and the key elements captured in the note.",
-    dueDate: "2026-05-04",
-    status: "submitted",
-    type: "observation",
-    estimatedTime: "2 hrs",
-    submission: {
-      text: "I shadowed Dr. Martinez during three patient encounters today. The first was a follow-up for hypertension — I noticed she captured the BP reading (138/82), medication compliance, and the patient's chief complaint about fatigue. She used SOAP format clearly. In the second encounter, an urgent visit for a URI, the HPI was much shorter and focused on symptom onset and duration. I struggled a bit keeping up with the pace but managed to capture the key elements. The third was a wellness visit — lots of preventive care items like vaccines and screenings which I hadn't practiced before. Overall it was really valuable. I feel more confident about routine visits but need more practice with urgent and complex cases.",
-      submittedAt: "2026-04-27T14:30:00Z",
-    },
-    coachResponse: {
-      text: "Great reflection, Alex! You picked up on something really important — the pacing difference between routine and urgent visits is one of the hardest things to adapt to early on. For urgent visits, try focusing on just 3 things first: chief complaint, onset, and severity. Everything else can be filled in after. Your note on the wellness visit preventive items shows good attention to detail. For next time, try drafting a quick bullet list right after the encounter before you write the full note — it helps lock in the details. Keep up the momentum!",
-      respondedAt: "2026-04-27T17:45:00Z",
-      coachName: "Sarah Chen",
-    },
-  },
-  {
-    id: 3,
-    week: 1,
-    title: "Practice SOAP Note — Case Study",
-    description:
-      "Using the provided case study transcript, write a complete SOAP note. Submit your draft for coach review.",
-    dueDate: "2026-05-06",
-    status: "not_started",
-    type: "writing",
-    estimatedTime: "1 hr",
-    submission: null,
-    coachResponse: null,
-  },
-  {
-    id: 4,
-    week: 2,
-    title: "Review Common Abbreviations",
-    description:
-      "Study the list of 50 approved abbreviations used in your facility. Complete the short quiz at the end.",
-    dueDate: "2026-05-09",
-    status: "not_started",
-    type: "quiz",
-    estimatedTime: "30 min",
-    submission: null,
-    coachResponse: null,
-  },
-  {
-    id: 5,
-    week: 2,
-    title: "Live Scribing Session #1",
-    description:
-      "Complete your first independent scribing shift. Your supervising scribe will be available but you'll take the lead. Submit a reflection afterward.",
-    dueDate: "2026-05-13",
-    status: "not_started",
-    type: "hands_on",
-    estimatedTime: "4 hrs",
-    submission: null,
-    coachResponse: null,
+    messages: [
+      {
+        role: "ai",
+        avatar: "S",
+        name: "Steppy AI",
+        content: "Respond Keyon's request to switch payment method",
+        type: "escalation",
+        tags: ["AI coach escalation", "Technical issue"],
+        subtext: "Keyon asked to switch payment method through AI coach because he was not able to update the payment method in the classroom.",
+        studentCard: {
+          name: "Keyon Moore",
+          cohort: "M54 Morning 3",
+          avatar: "KM",
+        },
+        steps: [
+          {
+            id: "triage",
+            label: "Create a triage ticket",
+            action: "Confirm",
+          },
+          {
+            id: "message",
+            label: "Send message to Keyon",
+            aiDraft: {
+              subject: "AI draft",
+              body: "Hi Keyon, I was notified that you have an issue to update your payment method in the classroom. We are investigating an issue and we will get back to you.",
+              actions: ["Skip for now", "Reply in Community"],
+            },
+          },
+        ],
+      },
+      {
+        role: "user",
+        content: "It makes sense to me. Just go ahead.",
+      },
+    ],
   },
 ]
-
-export const progress = {
-  completedTasks: 1,
-  totalTasks: 5,
-  currentWeek: 1,
-  totalWeeks: 4,
-  completionRate: 20,
-}
