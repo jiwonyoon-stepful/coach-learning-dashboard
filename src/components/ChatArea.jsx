@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { chatStates } from "../data/mock"
+import { useState, useRef, useEffect } from "react"
+import { conversation } from "../data/mock"
 
 function AIDraftCard({ draft }) {
   return (
@@ -88,8 +88,23 @@ function AIMessage({ msg }) {
           </div>
         )}
 
+        {msg.type === "text" && (
+          <div className="rounded-xl border border-gray-200 bg-white px-4 py-3">
+            <p className="text-sm" style={{ color: "#171717" }}>{msg.content}</p>
+          </div>
+        )}
+
+        {msg.type === "completion" && (
+          <div className="rounded-xl border border-green-200 px-4 py-3" style={{ background: "#dff4d7" }}>
+            <p className="text-sm font-medium" style={{ color: "#1c5c3a" }}>{msg.content}</p>
+          </div>
+        )}
+
         {(msg.type === "task" || msg.type === "escalation") && (
           <div className="rounded-xl border border-gray-200 bg-white p-4">
+            {msg.taskNumber && (
+              <p className="text-xs font-semibold mb-2" style={{ color: "#395777" }}>Task {msg.taskNumber} of 5</p>
+            )}
             {msg.tags && (
               <div className="flex gap-2 mb-3">
                 {msg.tags.map((t) => <Tag key={t} label={t} />)}
@@ -99,10 +114,10 @@ function AIMessage({ msg }) {
             {msg.subtext && <p className="text-sm mb-3" style={{ color: "#395777" }}>{msg.subtext}</p>}
             {msg.studentCard && <StudentCard student={msg.studentCard} />}
 
-            {/* Action steps */}
-            {msg.steps && (
+            {/* Escalation multi-step */}
+            {msg.type === "escalation" && msg.steps && (
               <div className="mt-3 space-y-2">
-                {msg.steps.map((step, i) => (
+                {msg.steps.map((step) => (
                   <div key={step.id} className="rounded-xl border border-gray-200 bg-gray-50 p-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
@@ -121,7 +136,7 @@ function AIMessage({ msg }) {
               </div>
             )}
 
-            {/* Inline step buttons for task type */}
+            {/* Regular task outreach buttons */}
             {msg.type === "task" && msg.steps && (
               <div className="flex gap-2 mt-3">
                 {msg.steps.map((step) => (
@@ -151,29 +166,32 @@ function AIMessage({ msg }) {
 function UserMessage({ msg }) {
   return (
     <div className="flex justify-end">
-      <div className="max-w-xs px-4 py-2.5 rounded-2xl text-sm text-white leading-relaxed" style={{ background: "#1c3954" }}>
+      <div className="max-w-sm px-4 py-2.5 rounded-2xl text-sm text-white leading-relaxed" style={{ background: "#1c3954" }}>
         {msg.content}
       </div>
     </div>
   )
 }
 
-export default function ChatArea({ stateIndex = 0 }) {
+export default function ChatArea() {
   const [input, setInput] = useState("")
-  const state = chatStates[stateIndex]
+  const bottomRef = useRef(null)
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [])
 
   return (
     <div className="flex flex-col flex-1 overflow-hidden bg-white">
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-6 py-5 space-y-5">
-        {state.messages.map((msg, i) => (
+      <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4">
+        {conversation.map((msg, i) => (
           msg.role === "ai"
             ? <AIMessage key={i} msg={msg} />
             : <UserMessage key={i} msg={msg} />
         ))}
+        <div ref={bottomRef} />
       </div>
 
-      {/* Input */}
       <div className="shrink-0 px-5 py-3 border-t border-gray-100">
         <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-2.5">
           <input

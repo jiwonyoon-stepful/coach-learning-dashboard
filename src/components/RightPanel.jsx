@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import { todaysTasks, escalatedTasks, performance, cohortTargets } from "../data/mock"
 
 function CheckIcon({ done }) {
@@ -93,12 +94,12 @@ export default function RightPanel() {
 
       {/* My Performance */}
       <div className="px-5 pt-4 pb-3">
-        <div className="flex items-center justify-between mb-0.5">
-          <span className="text-sm font-semibold" style={{ color: "#171717" }}>My Performance</span>
+        <Link to="/performance" className="flex items-center justify-between mb-0.5 group">
+          <span className="text-sm font-semibold group-hover:underline" style={{ color: "#171717" }}>My Performance</span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#395777" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
           </svg>
-        </div>
+        </Link>
         <p className="text-xs mb-3" style={{ color: "#395777" }}>{performance.week}</p>
         <div className="space-y-2 text-sm">
           {[
