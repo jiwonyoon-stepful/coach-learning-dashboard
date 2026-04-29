@@ -139,3 +139,24 @@ export const chatStates = [
     ],
   },
 ]
+
+export const performanceData = {
+  week: "May 8-14, 2026",
+  rank: "3rd",
+  team: "Green team",
+  cohortTabs: ["M53 Evening 13", "M55 Morning 11", "M56 Evening 1"],
+  stats: [
+    { label: "Outreach", value: "10", unit: "", note: "+3 more than last week", status: "on_track" },
+    { label: "Sentiment analysis", value: "4", unit: "/5", note: "Same as last week", status: "on_track" },
+    { label: "Grade pts helped", value: "+47 pts", unit: "", note: "You helped 3 students for grade", status: "on_track" },
+    { label: "Tuition Collection", value: "$1240", unit: "", note: "Cumulative Cash Collected", status: "on_track" },
+  ],
+  outreachStudents: [
+    { name: "Rosa Luis", status: "completed", riskFactor: "Payment", outreachDate: "05/06/26", method: "Email", completionDate: "05/08/26", description: "$200 of $300 balance paid" },
+    { name: "Darius Moore", status: "completed", riskFactor: "Payment", outreachDate: "05/06/26", method: "Email", completionDate: "05/09/26", description: "$200 of $300 balance paid" },
+    { name: "Keyon Harris", status: "completed", riskFactor: "Grade", outreachDate: "05/04/26", method: "SMS", completionDate: "05/09/26", description: "3 Assignments completed. Grade increased 64% → 68%" },
+    { name: "Sofia Mario", status: "completed", riskFactor: "Grade", outreachDate: "05/04/26", method: "SMS", completionDate: "05/09/26", description: "3 Assignments completed. Grade increased 66% → 70%" },
+    { name: "Deven Rose", status: "at_risk", riskFactor: "Grade", outreachDate: "04/27/26", method: "Email", completionDate: "--", description: "No response" },
+    { name: "James Thompson", status: "at_risk", riskFactor: "Grade", outreachDate: "04/27/26", method: "Email", completionDate: "--", description: "No response" },
+  ],
+}

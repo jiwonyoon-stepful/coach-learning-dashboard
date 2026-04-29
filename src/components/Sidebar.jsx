@@ -1,3 +1,5 @@
+import { Link, useLocation } from "react-router-dom"
+
 const icons = {
   home: (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -27,37 +29,43 @@ const icons = {
 }
 
 const navItems = [
-  { id: "home", icon: icons.home, active: true },
-  { id: "users", icon: icons.users },
-  { id: "chart", icon: icons.chart },
-  { id: "calendar", icon: icons.calendar },
+  { id: "home", icon: "home", to: "/" },
+  { id: "users", icon: "users", to: null },
+  { id: "chart", icon: "chart", to: "/performance" },
+  { id: "calendar", icon: "calendar", to: null },
 ]
 
 export default function Sidebar() {
+  const location = useLocation()
+
   return (
     <aside className="flex flex-col items-center w-14 shrink-0 py-4 gap-2" style={{ background: "#1c3954" }}>
-      {/* Logo */}
       <div className="w-8 h-8 rounded-lg flex items-center justify-center mb-3 text-sm font-bold" style={{ background: "#fff9ef", color: "#1c3954" }}>
         S
       </div>
 
-      {/* Nav icons */}
       <nav className="flex flex-col gap-1 flex-1">
-        {navItems.map(({ id, icon, active }) => (
-          <button
-            key={id}
-            className="w-9 h-9 rounded-lg flex items-center justify-center transition-colors"
-            style={{
-              background: active ? "#dff4d7" : "transparent",
-              color: active ? "#1c3954" : "rgba(255,255,255,0.55)",
-            }}
-          >
-            {icon}
-          </button>
-        ))}
+        {navItems.map(({ id, icon: iconKey, to }) => {
+          const active = to ? location.pathname === to : false
+          const content = (
+            <span
+              className="w-9 h-9 rounded-lg flex items-center justify-center transition-colors"
+              style={{
+                background: active ? "#dff4d7" : "transparent",
+                color: active ? "#1c3954" : "rgba(255,255,255,0.55)",
+              }}
+            >
+              {icons[iconKey]}
+            </span>
+          )
+          return to ? (
+            <Link key={id} to={to}>{content}</Link>
+          ) : (
+            <button key={id}>{content}</button>
+          )
+        })}
       </nav>
 
-      {/* Bottom: notification + avatar */}
       <div className="flex flex-col items-center gap-3 mt-auto">
         <button className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ color: "rgba(255,255,255,0.55)" }}>
           {icons.bell}
